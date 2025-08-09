@@ -27,7 +27,16 @@ git config --global alias.gsw "switch"
 git config --global alias.gl "log"
 git config --global alias.gar "remote add"
 git config --global init.defaultBranch "main"
+git config --global commit.gpgsign true
+git config --global gpg.program "$(which gpg)"
 
+# generate GPG key for git commit sign
+gpg --full-generate-key
+gpg --list-secret-keys --keyid-format LONG
+echo "git config --global user.signingkey <your-key-id>"
+echo "INFO: Copy the above command and run it to set your GPG key for Git signing."
+echo "gpg --armor --export <your-key-id>"
+echo "INFO: Copy the above command and run it to export your GPG key for GitHub."
 
 # install python using deadsnakes
 sudo add-apt-repository ppa:deadsnakes/ppa
