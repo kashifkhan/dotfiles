@@ -110,6 +110,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
     echo "INFO: Installing Wireshark..."
     sudo apt install -y wireshark
+    echo "INFO: Adding $USER to the wireshark group..."
+    sudo usermod -aG wireshark $USER
 
     # Install from script
     echo "INFO: Installing Tailscale..."
