@@ -1,38 +1,7 @@
 #!/bin/bash
-
-# Exit immeecho "INFO: Configuring Git..."
-git config --global user.name "$git_name"
-git config --global user.email "$git_email"
-
-# Git commit signing configuration
-echo "INFO: Setting up Git commit signing..."
-git config --global commit.gpgsign true
-git config --global gpg.program "$(which gpg)"
-
-# Add a note about generating a GPG key for signing if not already set up
-echo ""
-echo "NOTE: To set up Git commit signing with GPG:"
-echo "  1. Generate a GPG key: gpg --full-generate-key"
-echo "  2. Find your key ID: gpg --list-secret-keys --keyid-format=long"
-echo "  3. Set it in Git: git config --global user.signingkey YOUR_KEY_ID"
-echo "  4. Add your key to GitHub/GitLab: gpg --armor --export YOUR_KEY_ID"
-echo ""
-
-# Configure common Git aliases
-git config --global alias.grum "rebase upstream main"
-git config --global alias.gfu "fetch upstream"
-git config --global alias.gsw "switch"
-git config --global alias.gl "log"
-git config --global alias.gar "remote add"
-git config --global init.defaultBranch "main"f a command exits with a non-zero status
 set -e
-
 # Give people a chance to retry running the installation
 trap 'echo "installation failed! You can retry by re-running' ERR
-
-# prompt for full name email for github
-read -p "Enter your full name: " full_name
-read -p "Enter your email address: " email
 
 # basic setup and updates
 echo "INFO: Updating system and installing base packages..."
@@ -45,6 +14,9 @@ sudo apt install -y git htop tree curl wget zsh  \
 echo "INFO: Setting Zsh as the default shell for $USER..."
 chsh -s $(which zsh) "$USER"
 
+# prompt for full name email for github
+read -p "Enter your full name: " full_name
+read -p "Enter your email address: " email
 
 echo "INFO: Configuring Git..."
 git config --global user.name "$full_name"
@@ -56,18 +28,6 @@ git config --global alias.gl "log"
 git config --global alias.gar "remote add"
 git config --global init.defaultBranch "main"
 
-
-echo "INFO: Generating SSH key for GitHub..."
-if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
-  ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/id_ed25519" -N ""
-  eval "$(ssh-agent -s)"
-  ssh-add "$HOME/.ssh/id_ed25519"
-  echo "INFO: SSH key generated. Public key:"
-  cat "$HOME/.ssh/id_ed25519.pub"
-  echo "INFO: Copy the above public key and add it to your GitHub account: https://github.com/settings/keys"
-else
-  echo "INFO: SSH key already exists at $HOME/.ssh/id_ed25519"
-fi
 
 # install python using deadsnakes
 sudo add-apt-repository ppa:deadsnakes/ppa
