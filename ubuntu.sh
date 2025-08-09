@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-# Give people a chance to retry running the installation
 trap 'echo "installation failed! You can retry by re-running' ERR
 
 # basic setup and updates
@@ -29,14 +28,6 @@ git config --global alias.gar "remote add"
 git config --global init.defaultBranch "main"
 git config --global commit.gpgsign true
 git config --global gpg.program "$(which gpg)"
-
-# generate GPG key for git commit sign
-gpg --full-generate-key
-gpg --list-secret-keys --keyid-format LONG
-echo "git config --global user.signingkey <your-key-id>"
-echo "INFO: Copy the above command and run it to set your GPG key for Git signing."
-echo "gpg --armor --export <your-key-id>"
-echo "INFO: Copy the above command and run it to export your GPG key for GitHub."
 
 # install python using deadsnakes
 sudo add-apt-repository ppa:deadsnakes/ppa
@@ -137,4 +128,13 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
 fi
 
 sudo apt autoremove -y
+
+# generate GPG key for git commit sign
+gpg --full-generate-key
+gpg --list-secret-keys --keyid-format LONG
+echo "git config --global user.signingkey <your-key-id>"
+echo "INFO: Copy the above command and run it to set your GPG key for Git signing."
+echo "gpg --armor --export <your-key-id>"
+echo "INFO: Copy the above command and run it to export your GPG key for GitHub."
+
 echo "INFO: Finished installing applications."
