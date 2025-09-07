@@ -20,11 +20,6 @@ read -p "Enter your email address: " email
 echo "INFO: Configuring Git..."
 git config --global user.name "$full_name"
 git config --global user.email "$email"
-git config --global alias.grum "rebase upstream main"
-git config --global alias.gfu "fetch upstream"
-git config --global alias.gsw "switch"
-git config --global alias.gl "log"
-git config --global alias.gar "remote add"
 git config --global init.defaultBranch "main"
 git config --global commit.gpgsign true
 git config --global gpg.program "$(which gpg)"
