@@ -34,7 +34,7 @@ sudo apt install -y python3.13 python3.13-venv python3.13-dev
 
 # Install nvm & node lts
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-source ~/.bashrc
+source ~/.zshrc
 nvm install --lts
 
 # Desktop software
