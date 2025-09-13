@@ -41,10 +41,14 @@ nvm install --lts
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     echo "INFO: Adding external repositories for Signal, VS Code, and Edge..."
 
-    # Signal
-    signal_keyring="/usr/share/keyrings/signal-desktop-keyring.gpg"
-    wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor | sudo tee "$signal_keyring" > /dev/null
-    echo "deb [arch=amd64 signed-by=$signal_keyring] https://updates.signal.org/desktop/apt xenial main" | sudo tee /etc/apt/sources.list.d/signal-xenial.list > /dev/null
+  # Signal
+  # Official Signal Desktop repository and key (official instructions)
+  wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
+  cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
+  wget -O signal-desktop.sources https://updates.signal.org/static/desktop/apt/signal-desktop.sources
+  cat signal-desktop.sources | sudo tee /etc/apt/sources.list.d/signal-desktop.sources > /dev/null
+  # Update package lists and install Signal
+  sudo apt update && sudo apt install -y signal-desktop
 
     # VS Code
     vscode_keyring="/usr/share/keyrings/packages.microsoft.gpg"
@@ -58,8 +62,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     echo "INFO: Updating package lists and installing all applications..."
     sudo apt update
 
-    # Install apps from new repositories
-    sudo apt install -y signal-desktop code microsoft-edge-beta
+  # Install apps from new repositories
+  sudo apt install -y code microsoft-edge-beta
 
     # Install .deb packages
     docker_deb="docker-desktop-amd64.deb"
